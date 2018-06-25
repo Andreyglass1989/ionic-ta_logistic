@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Трекинг
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+<ion-list>
+  <form  [formGroup]="inputParcel" (ngSubmit)="saveForm()">
+    <ion-item>
+      <ion-label floating>Number parcel</ion-label>
+       <ion-input type="text" formControlName="packNumberInput"></ion-input>
+      <!-- <ion-input type="text" [(ngModel)]="packNumberInput" name="packNumberInput"></ion-input> -->
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of validation_messages.packNumberInput" >
+        <div *ngIf="inputParcel.get('packNumberInput').hasError(validation.type)">
+          <p style="color:red">{{validation.message}}</p>
+        </div>
+      </ng-container>
+    </div>
+
+  <!--   <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input type="password"></ion-input>
+    </ion-item> -->
+    <button ion-button type="submit" [disabled]="!inputParcel.valid">Search</button>
+  </form>
+</ion-list>
+
+
+<ion-grid *ngIf="packNumber">
+  <ion-row>
+    <ion-col width-50 offset-25>
+      <!-- <h3>{{ packNumber[0].parcel_number }} bla</h3> -->
+      <h3>{{ packNumber.parcel_number }}</h3>
+      <p>{{ packNumber.date_added }}</p>
+      <p>{{ packNumber.parcel_status }}</p>
+    </ion-col>
+    <button ion-button (click)="getHistory()" type="button" clear icon-end><ion-icon name="pin"></ion-icon>History</button>
+
+  </ion-row>
+</ion-grid> 
+
+<ion-grid *ngFor="let item of packHistory">
+  <ion-row>
+    <ion-col width-50 offset-25>
+      <span><strong>{{ item.date_added }}</strong> - {{ item.parcel_status_id }}</span>
+    </ion-col>
+
+  </ion-row>
+</ion-grid> 
+
+<button ion-button *ngIf="packHistory" (click)="getCustomers()" type="button" clear icon-start><ion-icon name="person"></ion-icon>Customer</button>
+
+
+<ion-grid *ngIf="full_customer_address">
+  <ion-row>
+     <div text-center>
+      <h3>中國國際貿易集團有限公司</h3>
+      <span>CHINA INTERNATIONAL GROUP LIMITED</span>
+      <p style="font-size: 7.5px">Room 1203, 12/F, Tower 3, China, Hong Kong City, 33 Canton Road, Tsimshatsui, Kowloon, Hong Kong</p>
+    
+      <br>
+      <p style="margin:auto;"><strong>INVOICE {{ packNumber.parcel_number }}</strong><br>(online sale shop) 發票（網上銷售店</p>
+      <br>
+      </div>
+      <p text-left>Сonsignee / 收貨人: {{ full_customer_address }}<br>
+      <br>Date/日期： {{ packNumber.date_added }}<br>
+      <br>Description of goods / 商品描述<br>(country of origin of goods China / 原產中國的貨物的原產地)</p>
+
+  </ion-row>
+</ion-grid> 
+
+
+<button ion-button *ngIf="full_customer_address" (click)="getInvoice0()" type="button" clear icon-start><ion-icon name="paper"></ion-icon>Invoice</button>
+<!-- <a href="#"  (click)="getInvoice0()">Invoice</a> -->
+<!-- *ngIf="full_customer_address"  -->
+
+
+</ion-content>
